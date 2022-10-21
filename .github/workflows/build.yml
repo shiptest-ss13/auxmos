@@ -1,7 +1,7 @@
 name: Linux build
 on:
   push:
-    branches: [master]
+    branches: [master, byupdate]
 jobs:
   linux-build:
     runs-on: ubuntu-latest
