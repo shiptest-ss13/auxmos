@@ -202,7 +202,7 @@ fn _process_turf_start() -> Result<(), String> {
 						byond_string!("high_pressure_turfs"),
 						Value::from(hpt as f32),
 					)?;
-					Ok(Value::null())
+					Ok(())
 				})));
 				(low_pressure_turfs, high_pressure_turfs)
 			};
@@ -236,7 +236,7 @@ fn _process_turf_start() -> Result<(), String> {
 						byond_string!("num_group_turfs_processed"),
 						Value::from(processed_turfs as f32),
 					)?;
-					Ok(Value::null())
+					Ok(())
 				})));
 			}
 			if info.equalize_enabled {
@@ -299,7 +299,7 @@ fn _process_turf_start() -> Result<(), String> {
 						byond_string!("num_equalize_processed"),
 						Value::from(processed_turfs as f32),
 					)?;
-					Ok(Value::null())
+					Ok(())
 				})));
 			}
 			{
@@ -322,7 +322,7 @@ fn _process_turf_start() -> Result<(), String> {
 						byond_string!("cost_post_process"),
 						Value::from(0.8 * prev_cost + 0.2 * (bench as f32)),
 					)?;
-					Ok(Value::null())
+					Ok(())
 				})));
 			}
 			TASKS_RUNNING.fetch_sub(1, Ordering::SeqCst);
@@ -545,7 +545,7 @@ fn fdm(
 									}
 								}
 							}
-							Ok(Value::null())
+							Ok(())
 						})));
 					});
 			}
@@ -744,7 +744,7 @@ fn post_process() {
 					update_visuals(&turf)?;
 				}
 			}
-			Ok(Value::null())
+			Ok(())
 		})));
 	});
 	for (k, v) in receiver.drain() {
@@ -938,7 +938,7 @@ fn _process_heat_start() -> Result<(), String> {
 						drop(sender.try_send(Box::new(move || {
 							let turf = unsafe { Value::turf_by_id_unchecked(i) };
 							turf.set(byond_string!("to_be_destroyed"), 1.0)?;
-							Ok(Value::null())
+							Ok(())
 						})));
 					}
 				});

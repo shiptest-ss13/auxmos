@@ -196,7 +196,7 @@ fn finalize_eq(
 								.ok_or_else(|| runtime!("Couldn't find stack_trace!"))?
 								.call(&[&Value::from_string(e.message.as_str())?])?;
 						}
-						Ok(Value::null())
+						Ok(())
 					})));
 				}
 			}
@@ -450,7 +450,7 @@ fn explosively_depressurize(
 	max_x: i32,
 	max_y: i32,
 	equalize_hard_turf_limit: usize,
-) -> DMResult {
+) -> Result<(), Runtime> {
 	let mut info: HashMap<TurfID, Cell<ReducedInfo>, FxBuildHasher> =
 		HashMap::with_hasher(FxBuildHasher::default());
 	let mut turfs: IndexSet<TurfID, FxBuildHasher> =
@@ -504,7 +504,7 @@ fn explosively_depressurize(
 			}
 		}
 		if warned_about_planet_atmos {
-			return Ok(Value::null()); // planet atmos > space
+			return Ok(()); // planet atmos > space
 		}
 	}
 
@@ -512,7 +512,7 @@ fn explosively_depressurize(
 	process_aux_callbacks(crate::callbacks::ADJACENCIES);
 
 	if space_turfs.is_empty() {
-		return Ok(Value::null());
+		return Ok(());
 	}
 
 	for i in space_turfs.iter() {
@@ -617,7 +617,7 @@ fn explosively_depressurize(
 		m.clear_air();
 		byond_turf.call("handle_decompression_floor_rip", &[&Value::from(sum)])?;
 	}
-	Ok(Value::null())
+	Ok(())
 	//	if (total_gases_deleted / turfs.len() as f32) > 20.0 && turfs.len() > 10 { // logging I guess
 	//	}
 }
@@ -668,7 +668,7 @@ fn flood_fill_equalize_turfs(
 						// NOT ONE OF YOU IS GONNA SURVIVE THIS
 						// (I just made explosions less laggy, you're welcome)
 						if !ignore_zone {
-							drop(sender.send(Box::new(move || {
+							drop(sender.try_send(Box::new(move || {
 								explosively_depressurize(i, max_x, max_y, equalize_hard_turf_limit)
 							})));
 						}
@@ -733,7 +733,7 @@ fn process_planet_turfs(
 						let that_turf = unsafe { Value::turf_by_id_unchecked(loc) };
 						let this_turf = unsafe { Value::turf_by_id_unchecked(i) };
 						this_turf.call("consider_firelocks", &[&that_turf])?;
-						Ok(Value::null())
+						Ok(())
 					})));
 				}
 				if let Some(adj) = turfs
