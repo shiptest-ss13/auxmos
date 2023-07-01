@@ -56,7 +56,7 @@ jobs:
         with:
           toolchain: stable
           command: build
-          args: --target i686-unknown-linux-gnu --release --features "generic_fire_hook katmos"
+          args: --target i686-unknown-linux-gnu --release --features "all_reaction_hooks katmos"
         if: matrix.os == 'ubuntu-latest'
 
       - name: Upload binary to release
