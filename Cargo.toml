@@ -33,7 +33,7 @@ putnamos_decompression = ["putnamos"]
 crate-type = ["cdylib"]
 
 [dependencies]
-auxtools = { git = "https://github.com/willox/auxtools"}
+auxtools = { git = "https://github.com/willox/auxtools" }
 auxcallback = { path = "./crates/auxcallback" }
 auxcleanup = { path = "./crates/auxcleanup", optional = true}
 itertools = "0.10.5"
